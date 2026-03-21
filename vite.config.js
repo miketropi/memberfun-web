@@ -13,8 +13,8 @@ export default defineConfig({
   },
   server: {
     allowedHosts: [
-      'memberfun.beplus-agent.com', // Allow this specific host
-      '.beplus-agent.com'           // Wildcard to allow all subdomains (alternative)
+      'memberfun-api.beplus-agency.cloud', // Allow this specific host
+      '.beplus-agency.cloud'           // Wildcard to allow all subdomains (alternative)
     ],
     host: '0.0.0.0',
     port: 5173,
