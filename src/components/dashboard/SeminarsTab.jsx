@@ -1,8 +1,7 @@
-import { SeminarManager, CustomSeminarExample } from '../seminar';
+import { CustomSeminarExample } from '../seminar';
 
 export default function SeminarsTab() {
   return (
-    // <SeminarManager />
     <CustomSeminarExample />
   );
 }

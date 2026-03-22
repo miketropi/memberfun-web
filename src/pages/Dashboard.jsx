@@ -40,7 +40,7 @@ const Dashboard = () => {
     { id: 3, read: true, message: 'New document added to your library', date: '2023-03-10' },
   ]);
   
-  const [documents, setDocuments] = useState([
+  const [documents] = useState([
     { id: 1, title: 'Membership Agreement', type: 'PDF', date: '2023-01-15', size: '1.2 MB' },
     { id: 2, title: 'Welcome Package', type: 'PDF', date: '2023-01-15', size: '3.5 MB' },
     { id: 3, title: 'Member Benefits Guide', type: 'PDF', date: '2023-02-10', size: '2.1 MB' },
@@ -108,16 +108,14 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-zinc-50 py-8 dark:bg-zinc-950">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <DashboardHeader userData={userData} />
-        
-        <div className="mt-8 bg-white rounded-xl shadow-sm overflow-hidden">
-          <DashboardTabs notifications={notifications} />
-          
-          <div className="p-6">
-            {renderTabContent()}
-          </div>
+
+        <div className="mt-6 overflow-hidden rounded-2xl border border-zinc-200/90 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900/85">
+          <DashboardTabs />
+
+          <div className="p-6 sm:p-8">{renderTabContent()}</div>
         </div>
       </div>
     </div>

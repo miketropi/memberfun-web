@@ -17,7 +17,7 @@ const Layout = () => {
   }, [theme]);
 
   return (
-    <div className={`flex flex-col min-h-screen ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+    <div className="flex min-h-screen flex-col bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50">
       <Navbar />
       <main className="flex-grow">
         <Outlet />

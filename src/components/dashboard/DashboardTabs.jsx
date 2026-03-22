@@ -1,9 +1,8 @@
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Home, FileText, Bell, Settings, Calendar, Gamepad2, Trophy } from 'lucide-react';
 
-const DashboardTabs = ({ notifications = [] }) => {
-  const unreadCount = notifications.filter(n => !n.read).length;
+const DashboardTabs = () => {
   
   const tabs = [
     { id: 'overview', label: 'Overview', icon: 'home', path: '/dashboard/overview' },
@@ -16,23 +15,24 @@ const DashboardTabs = ({ notifications = [] }) => {
   ];
   
   return (
-    <div className="flex overflow-x-auto border-b border-gray-200 bg-white">
-      {tabs.map(tab => (
+    <div className="flex overflow-x-auto border-b border-zinc-200/90 bg-zinc-50/90 dark:border-zinc-800 dark:bg-zinc-950/40">
+      {tabs.map((tab) => (
         <NavLink
           key={tab.id}
           to={tab.path}
-          className={({ isActive }) => `
-            relative flex items-center py-4 px-6 text-sm font-medium transition-colors
-            ${isActive
-              ? 'text-blue-600 border-b-2 border-blue-600'
-              : 'text-gray-500 hover:text-gray-700 hover:border-b-2 hover:border-gray-300'
-            }
-          `}
+          className={({ isActive }) =>
+            [
+              'relative flex shrink-0 items-center whitespace-nowrap border-b-2 px-5 py-4 text-sm font-semibold transition-colors sm:px-6',
+              isActive
+                ? 'border-violet-600 text-violet-700 dark:border-violet-400 dark:text-violet-300'
+                : 'border-transparent text-zinc-500 hover:border-zinc-300 hover:text-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:text-zinc-200',
+            ].join(' ')
+          }
         >
           {getIcon(tab.icon)}
           <span className="ml-2">{tab.label}</span>
           {tab.badge > 0 && (
-            <span className="ml-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+            <span className="ml-2 rounded-full bg-rose-500 px-2 py-0.5 text-xs font-semibold text-white">
               {tab.badge}
             </span>
           )}

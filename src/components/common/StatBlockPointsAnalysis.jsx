@@ -28,8 +28,8 @@ const StatBlockPointsAnalysis = ({ data }) => {
       {
         label: 'Points',
         data: [65, 59, 80, 81, 56, 55],
-        backgroundColor: 'rgba(75, 192, 192, 0.5)',
-        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgba(139, 92, 246, 0.45)',
+        borderColor: 'rgb(124, 58, 237)',
         borderWidth: 1,
       },
     ],
@@ -48,27 +48,10 @@ const StatBlockPointsAnalysis = ({ data }) => {
         text: 'Points Analysis Over Time',
       },
     },
-    // scales: {
-    //   y: {
-    //     beginAtZero: true,
-    //     title: {
-    //       display: true,
-    //       text: 'Points',
-    //     },
-    //   },
-    //   x: {
-    //     title: {
-    //       display: true,
-    //       text: 'Date',
-    //     },
-    //   },
-    // },
-    backgroundColor: 'rgba(75, 192, 75, 0.5)',
-    borderColor: 'rgb(75, 192, 75)',
   };
 
   return (
-    <div className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow border border-gray-100">
+    <div className="rounded-2xl border border-zinc-200/90 bg-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/60">
       <Bar options={options} data={chartData} />
     </div>
   );

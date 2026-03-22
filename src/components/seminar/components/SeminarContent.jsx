@@ -47,15 +47,17 @@ export default function SeminarContent({
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
-          {filters.status === 'all' ? 'All Seminars' : 
-           filters.status === 'upcoming' ? 'Upcoming Seminars' : 'Past Seminars'}
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+          {filters.status === 'all'
+            ? 'All seminars'
+            : filters.status === 'upcoming'
+              ? 'Upcoming seminars'
+              : 'Past seminars'}
         </h2>
       </div>
       <SeminarList
         seminars={seminars}
-        isRegisteredFn={isRegistered}
         onSeminarClick={onSeminarClick}
         isPast={filters.status === 'past'}
         emptyMessage="No seminars available."

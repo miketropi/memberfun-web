@@ -4,6 +4,11 @@ import { usersAPI } from '../../api/apiService';
 import useAuthStore from '../../store/authStore';
 import Toast from '../../components/Toast';
 
+const inputClass =
+  'mt-2 block w-full rounded-xl border-2 border-zinc-200 bg-white px-4 py-2.5 text-zinc-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 disabled:opacity-70 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100';
+
+const labelClass = 'block text-sm font-semibold text-zinc-800 dark:text-zinc-200';
+
 const SettingsTab = ({ userData }) => {
   const { user, setUser } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +32,8 @@ const SettingsTab = ({ userData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    let { email, ...rest } = formData;
+    let { email: _email, ...rest } = formData;
+    void _email;
     const response = await usersAPI.updateUser(userData.id, rest);
     console.log(response);
     let message = response.message;
@@ -49,60 +55,69 @@ const SettingsTab = ({ userData }) => {
 
       {/* { JSON.stringify(userData) } */}
       <Toast ref={toastRef} />
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6">Account Settings</h2>
+      <h2 className="mb-6 text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">Account settings</h2>
       <form onSubmit={handleSubmit} className="space-y-8">
-        <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h3 className="text-lg font-medium text-gray-800 mb-4">Profile Information</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="md:col-span-2 mb-4">
-              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                <p className="text-sm text-gray-600">
-                  To update your profile picture, please visit <a href="https://gravatar.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Gravatar.com</a> and set up an avatar using your email address. The avatar will automatically sync with your profile.
+        <section className="rounded-2xl border border-zinc-200/90 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/60">
+          <h3 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100">Profile information</h3>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="mb-4 md:col-span-2">
+              <div className="rounded-xl border border-zinc-200/90 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-950/50">
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  To update your profile picture, visit{' '}
+                  <a
+                    href="https://gravatar.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-violet-600 underline hover:text-violet-500 dark:text-violet-400"
+                  >
+                    Gravatar.com
+                  </a>{' '}
+                  and set up an avatar using your email address. The avatar will sync with your profile.
                 </p>
               </div>
             </div>
             <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-                First Name
+              <label htmlFor="first_name" className={labelClass}>
+                First name
               </label>
-              <input 
+              <input
                 type="text"
                 id="first_name"
                 name="first_name"
                 value={formData.first_name}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={inputClass}
               />
             </div>
             <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
-                Last Name
+              <label htmlFor="last_name" className={labelClass}>
+                Last name
               </label>
-              <input 
+              <input
                 type="text"
                 id="last_name"
                 name="last_name"
                 value={formData.last_name}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={inputClass}
               />
             </div>
             <div className="md:col-span-2">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email Address
+              <label htmlFor="email" className={labelClass}>
+                Email address
               </label>
-              <input 
+              <input
                 disabled
                 type="email"
                 id="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={inputClass}
               />
             </div>
             <div className="md:col-span-2">
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="description" className={labelClass}>
                 Description
               </label>
               <textarea
@@ -111,20 +126,20 @@ const SettingsTab = ({ userData }) => {
                 value={formData.description}
                 onChange={handleChange}
                 rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={inputClass}
                 placeholder="Tell us about yourself..."
               />
             </div>
           </div>
         </section>
-        
+
         <div className="flex justify-end">
-          <button 
+          <button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-xl bg-zinc-950 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-100"
             disabled={isLoading}
           >
-            {isLoading ? 'Saving...' : 'Save Changes'}
+            {isLoading ? 'Saving…' : 'Save changes'}
           </button>
         </div>
       </form>

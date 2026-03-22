@@ -1,36 +1,37 @@
-import { useState } from 'react';
 import { CheckCircle, XCircle, Download } from 'lucide-react';
 
-export default function SeminarRegistrationButton({ 
-  seminarId, 
-  isRegistered, 
-  onRegister, 
-  onCancelRegistration, 
+export default function SeminarRegistrationButton({
+  seminarId,
+  isRegistered,
+  onRegister,
+  onCancelRegistration,
   onExportCalendar,
-  loading = false
+  loading = false,
 }) {
   if (isRegistered) {
     return (
-      <div className="flex flex-col sm:flex-row sm:space-x-4">
+      <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
         <button
+          type="button"
           onClick={() => onCancelRegistration(seminarId)}
           disabled={loading}
-          className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md transition-colors mb-2 sm:mb-0 flex items-center justify-center"
+          className="inline-flex items-center justify-center rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-rose-700 disabled:opacity-60"
         >
           {loading ? (
-            <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></span>
+            <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
           ) : (
-            <XCircle className="h-5 w-5 mr-2" />
+            <XCircle className="mr-2 h-5 w-5" />
           )}
-          Cancel Registration
+          Cancel registration
         </button>
         {onExportCalendar && (
           <button
+            type="button"
             onClick={() => onExportCalendar(seminarId)}
-            className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-white py-2 px-4 rounded-md transition-colors flex items-center justify-center"
+            className="inline-flex items-center justify-center rounded-xl border-2 border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-800 transition hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
           >
-            <Download className="h-5 w-5 mr-2" />
-            Add to Calendar
+            <Download className="mr-2 h-5 w-5" />
+            Add to calendar
           </button>
         )}
       </div>
@@ -39,16 +40,17 @@ export default function SeminarRegistrationButton({
 
   return (
     <button
+      type="button"
       onClick={() => onRegister(seminarId)}
       disabled={loading}
-      className="bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-md transition-colors flex items-center justify-center"
+      className="inline-flex items-center justify-center rounded-xl bg-zinc-950 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:opacity-60 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-100"
     >
       {loading ? (
-        <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></span>
+        <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent dark:border-zinc-950 dark:border-t-transparent" />
       ) : (
-        <CheckCircle className="h-5 w-5 mr-2" />
+        <CheckCircle className="mr-2 h-5 w-5" />
       )}
-      Register for Seminar
+      Register for seminar
     </button>
   );
-} 
+}

@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import React from 'react';
-import { pointsAPI, generalAPI } from '../../api/apiService';
+import { generalAPI } from '../../api/apiService';
 import UserRank from '../UserRank';
-import { Beer, Calendar, FileText, MessageCircle } from 'lucide-react';
+import { Beer, Calendar, FileText } from 'lucide-react';
 import StatBlock from '../common/StatBlock';
 import StatBlockPointsAnalysis from '../common/StatBlockPointsAnalysis';
 import ClaimPointsDaily from '../common/ClaimPointsDaily';
@@ -15,23 +15,19 @@ const OverviewTab = ({ userData }) => {
 
   const [dashboardOverview, setDashboardOverview] = useState({});
 
-  const fetchDashboardOverview = async () => {
+  const fetchDashboardOverview = useCallback(async () => {
+    if (!userData?.id) return;
     const response = await generalAPI.getDashboardOverview(userData.id);
     setActivityStats([
       { label: 'Member Points', value: response.total_points },
-      { label: 'Ranking', value: <UserRank rank={ response.rank } /> },
+      { label: 'Ranking', value: <UserRank rank={response.rank} /> },
     ]);
     setDashboardOverview(response);
-  };
-
-  // fetch dashboard overview
-  useEffect(() => {
-
-    // validate userData?.id
-    if(userData?.id) {
-      fetchDashboardOverview();
-    }
   }, [userData?.id]);
+
+  useEffect(() => {
+    fetchDashboardOverview();
+  }, [fetchDashboardOverview]);
  
   const membershipDetails = [
     { label: 'Role', value: userData?.membershipType || 'Standard' },
@@ -61,8 +57,8 @@ const OverviewTab = ({ userData }) => {
           data: [],
           fill: false,
           tension: 0.1,
-          backgroundColor: 'rgba(75, 192, 192, 0.5)',
-          borderColor: 'rgb(75, 192, 192)',
+          backgroundColor: 'rgba(139, 92, 246, 0.45)',
+          borderColor: 'rgb(124, 58, 237)',
           borderWidth: 1,
         }]
       };
@@ -100,8 +96,8 @@ const OverviewTab = ({ userData }) => {
         data: pointsArray,
         fill: false,
         tension: 0.1,
-        backgroundColor: 'rgba(75, 192, 192, 0.5)',
-        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgba(139, 92, 246, 0.45)',
+        borderColor: 'rgb(124, 58, 237)',
         borderWidth: 1,
       }]
     };
@@ -124,29 +120,42 @@ const OverviewTab = ({ userData }) => {
   
   return (
     <div>
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6">Membership Overview</h2>
-      {/* { JSON.stringify(userData) } */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <h2 className="mb-6 text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+        Membership overview
+      </h2>
+      <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
         <StatCard title="Member Details" items={membershipDetails} />
         <StatCard title="Points & Ranking" items={activityStats} />
-        
-        <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-          <h3 className="text-lg font-bold text-gray-800 mb-4">Quick Actions</h3>
+
+        <div className="rounded-2xl border border-zinc-200/90 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/60 sm:p-6">
+          <h3 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100">Quick actions</h3>
           <div className="space-y-3">
-            <button disabled={true} className="disabled:opacity-50 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition">
-              Update Profile
+            <button
+              type="button"
+              disabled
+              className="w-full rounded-xl bg-zinc-950 py-2.5 px-4 text-sm font-semibold text-white opacity-50 transition hover:bg-zinc-800 disabled:cursor-not-allowed dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-100"
+            >
+              Update profile
             </button>
-            <button disabled={true} className="disabled:opacity-50 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg transition">
-              View Benefits
+            <button
+              type="button"
+              disabled
+              className="w-full rounded-xl border-2 border-violet-200 bg-violet-50 py-2.5 px-4 text-sm font-semibold text-violet-900 opacity-50 transition hover:bg-violet-100 disabled:cursor-not-allowed dark:border-violet-800 dark:bg-violet-950/40 dark:text-violet-100"
+            >
+              View benefits
             </button>
-            <button disabled={true} className="disabled:opacity-50 w-full bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg transition">
-              Contact Support
+            <button
+              type="button"
+              disabled
+              className="w-full rounded-xl border-2 border-zinc-200 bg-zinc-50 py-2.5 px-4 text-sm font-semibold text-zinc-800 opacity-50 transition hover:bg-zinc-100 disabled:cursor-not-allowed dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200"
+            >
+              Contact support
             </button>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
         {/* {  } */}
         {/* Points Analysis */}
         <StatBlockPointsAnalysis data={ convertTransactionsToChartData(dashboardOverview?.transactions) } />
@@ -160,16 +169,19 @@ const OverviewTab = ({ userData }) => {
       </div>
 
       {/** Claim Points Daily */}
-      <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 mb-8">
-        <h3 className="text-lg font-bold text-gray-800 mb-4">Claim Points Daily</h3>
-        <ClaimPointsDaily lastClaimDate={dashboardOverview?.last_claim_date} serverCurrentDate={dashboardOverview?.server_current_date} updatedUserPoints={ (points) => {
-          // console.log(points);
-          fetchDashboardOverview()
-        } } />
+      <div className="mb-8 rounded-2xl border border-zinc-200/90 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/60 sm:p-6">
+        <h3 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100">Claim points daily</h3>
+        <ClaimPointsDaily
+          lastClaimDate={dashboardOverview?.last_claim_date}
+          serverCurrentDate={dashboardOverview?.server_current_date}
+          updatedUserPoints={() => {
+            fetchDashboardOverview();
+          }}
+        />
       </div>
       
-      <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-        <h3 className="text-lg font-medium text-gray-800 mb-4">Recent Activity</h3>
+      <div className="rounded-2xl border border-zinc-200/90 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/60 sm:p-6">
+        <h3 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100">Recent activity</h3>
         <div className="space-y-4">
           {recentActivities.map(activity => (
             <ActivityItem key={activity.id} activity={activity} />
@@ -181,13 +193,13 @@ const OverviewTab = ({ userData }) => {
 };
 
 const StatCard = ({ title, items }) => (
-  <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-    <h3 className="text-lg font-bold text-gray-800 mb-4">{title}</h3>
+  <div className="rounded-2xl border border-zinc-200/90 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/60 sm:p-6">
+    <h3 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100">{title}</h3>
     <div className="space-y-3">
       {items.map((item, index) => (
-        <div key={index} className="flex justify-between items-center">
-          <div className="text-gray-500">{item.label}:</div>
-          <div className="font-medium text-gray-800">{item.value}</div>
+        <div key={index} className="flex items-center justify-between gap-4">
+          <div className="text-sm text-zinc-500 dark:text-zinc-400">{item.label}</div>
+          <div className="text-right text-sm font-medium text-zinc-900 dark:text-zinc-100">{item.value}</div>
         </div>
       ))}
     </div>
@@ -196,14 +208,15 @@ const StatCard = ({ title, items }) => (
 
 const ActivityItem = ({ activity }) => {
   const iconColors = {
-    clock: 'bg-blue-100 text-blue-600',
-    document: 'bg-green-100 text-green-600',
-    chat: 'bg-indigo-100 text-indigo-600'
+    clock: 'bg-violet-100 text-violet-700 dark:bg-violet-950/60 dark:text-violet-300',
+    document: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300',
+    chat: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-950/50 dark:text-cyan-300',
+    Beer: 'bg-violet-100 text-violet-700 dark:bg-violet-950/60 dark:text-violet-300',
   };
-  
+
   return (
     <div className="flex items-start">
-      <div className={`p-2 rounded-full mr-3 ${iconColors[activity.icon]}`}>
+      <div className={`mr-3 rounded-full p-2 ${iconColors[activity.icon] || iconColors.clock}`}>
         {activity.icon === 'clock' && (
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
@@ -219,8 +232,8 @@ const ActivityItem = ({ activity }) => {
         )}
       </div>
       <div>
-        <p className="font-medium text-gray-800">{activity.title}</p>
-        <p className="text-sm text-gray-500">{activity.time}</p>
+        <p className="font-medium text-zinc-900 dark:text-zinc-100">{activity.title}</p>
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">{activity.time}</p>
       </div>
     </div>
   );

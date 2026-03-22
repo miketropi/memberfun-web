@@ -1,49 +1,55 @@
 import SeminarCard from './SeminarCard';
 
-export default function SeminarList({ 
-  seminars, 
-  isRegisteredFn, 
-  onSeminarClick, 
+export default function SeminarList({
+  seminars,
+  onSeminarClick,
   isPast = false,
-  emptyMessage = 'No seminars available.'
+  emptyMessage = 'No seminars available.',
 }) {
   if (!seminars || seminars.length === 0) {
     return (
-      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-8 text-center">
-        <p className="text-gray-500 dark:text-gray-400">{emptyMessage}</p>
+      <div className="rounded-2xl border border-zinc-200/90 bg-zinc-50/80 p-8 text-center dark:border-zinc-800 dark:bg-zinc-900/40">
+        <p className="text-zinc-500 dark:text-zinc-400">{emptyMessage}</p>
       </div>
     );
   }
 
   return (
-    <div className="overflow-x-auto border">
-      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        <thead className="bg-gray-50 dark:bg-gray-800">
+    <div className="overflow-x-auto rounded-2xl border border-zinc-200/90 dark:border-zinc-800">
+      <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
+        <thead className="bg-zinc-50 dark:bg-zinc-900/80">
           <tr>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400"
+            >
               Seminar
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Date & Location
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400"
+            >
+              Date &amp; location
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400"
+            >
               Host
             </th>
             {!isPast && (
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400"
+              >
                 Status
               </th>
             )}
           </tr>
         </thead>
-        <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+        <tbody className="divide-y divide-zinc-200 bg-white dark:divide-zinc-800 dark:bg-zinc-950/40">
           {seminars.map((seminar) => (
-            <SeminarCard
-              key={seminar.id}
-              seminar={seminar}
-              isRegistered={isRegisteredFn ? isRegisteredFn(seminar.id) : false}
-              onClick={onSeminarClick}
-            />
+            <SeminarCard key={seminar.id} seminar={seminar} isPast={isPast} onClick={onSeminarClick} />
           ))}
         </tbody>
       </table>

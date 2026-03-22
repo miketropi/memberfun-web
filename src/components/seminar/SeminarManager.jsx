@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { seminarsAPI } from '../../api/apiService';
-import { isPast, isFuture, parseISO } from 'date-fns';
+import { isPast, parseISO } from 'date-fns';
 import SeminarTabs from './SeminarTabs';
 import SeminarList from './SeminarList';
 import SeminarDetails from './SeminarDetails';
@@ -14,10 +14,10 @@ export default function SeminarManager() {
   const [selectedSeminar, setSelectedSeminar] = useState(null);
   const [registeredSeminars, setRegisteredSeminars] = useState([]);
   const [registrationLoading, setRegistrationLoading] = useState(false);
-  const [pagination, setPagination] = useState({
+  const [, setPagination] = useState({
     total: 0,
     pages: 0,
-    page: 1
+    page: 1,
   });
 
   useEffect(() => {
@@ -124,25 +124,33 @@ export default function SeminarManager() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      <div className="flex h-64 items-center justify-center">
+        <div className="h-12 w-12 animate-spin rounded-full border-2 border-zinc-200 border-t-violet-600 dark:border-zinc-700 dark:border-t-violet-400" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
-        <strong className="font-bold">Error!</strong>
-        <span className="block sm:inline"> {error}</span>
+      <div
+        className="relative rounded-xl border border-red-200/80 bg-red-50 px-4 py-3 text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200"
+        role="alert"
+      >
+        <strong className="font-semibold">Error</strong>
+        <span className="mt-1 block sm:mt-0 sm:inline sm:before:content-['—_']">{error}</span>
       </div>
     );
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Member Seminars</h1>
+    <div className="rounded-2xl bg-transparent">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-600 dark:text-violet-400">
+            Learning
+          </p>
+          <h1 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">Member seminars</h1>
+        </div>
         <SeminarTabs activeTab={activeTab} onTabChange={setActiveTab} />
       </div>
 
@@ -160,10 +168,9 @@ export default function SeminarManager() {
         <div>
           {activeTab === 'upcoming' && (
             <>
-              <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Upcoming Seminars</h2>
+              <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-zinc-100">Upcoming seminars</h2>
               <SeminarList
                 seminars={upcomingSeminars}
-                isRegisteredFn={isRegistered}
                 onSeminarClick={handleSeminarClick}
                 emptyMessage="No upcoming seminars available."
               />
@@ -172,10 +179,9 @@ export default function SeminarManager() {
 
           {activeTab === 'past' && (
             <>
-              <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Past Seminars</h2>
+              <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-zinc-100">Past seminars</h2>
               <SeminarList
                 seminars={pastSeminars}
-                isRegisteredFn={isRegistered}
                 onSeminarClick={handleSeminarClick}
                 isPast={true}
                 emptyMessage="No past seminars available."

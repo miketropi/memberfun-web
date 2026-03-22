@@ -10,15 +10,17 @@ const ContactForm = ({
   },
   onSubmit,
   submitButtonText = 'Submit',
-  submitButtonClassName = 'inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500',
+  submitButtonClassName =
+    'inline-flex w-full justify-center rounded-xl bg-zinc-950 px-6 py-3.5 text-base font-semibold text-white shadow-sm transition hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:ring-offset-2 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-100 dark:focus:ring-offset-zinc-900',
   formClassName = 'grid grid-cols-1 gap-y-6',
-  inputClassName = 'py-3 px-4 block w-full shadow-sm focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md',
+  inputClassName =
+    'block w-full rounded-xl border-2 border-zinc-200 bg-white px-4 py-3 text-base text-zinc-900 shadow-sm placeholder:text-zinc-400 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-500',
   bgColor = 'bg-white',
-  labelColor = 'text-gray-700',
-  successBgColor = 'bg-green-50',
-  successTextColor = 'text-green-800',
-  errorBgColor = 'bg-red-50',
-  errorTextColor = 'text-red-800',
+  labelColor = 'text-zinc-800 dark:text-zinc-200',
+  successBgColor = 'bg-emerald-50 dark:bg-emerald-950/40',
+  successTextColor = 'text-emerald-900 dark:text-emerald-200',
+  errorBgColor = 'bg-red-50 dark:bg-red-950/40',
+  errorTextColor = 'text-red-900 dark:text-red-200',
   className = '',
   showNameField = true,
   showEmailField = true,
@@ -63,12 +65,14 @@ const ContactForm = ({
   };
 
   return (
-    <div className={`${bgColor} py-16 px-4 sm:px-6 lg:py-24 lg:px-8 ${className}`}>
-      <div className="max-w-lg mx-auto lg:max-w-none">
+    <div className={`${bgColor} ${className}`}>
+      <div className="mx-auto max-w-lg lg:max-w-none">
         {formStatus.submitted && (
           <div
-            className={`mb-6 p-4 rounded-md ${
-              formStatus.success ? successBgColor + ' ' + successTextColor : errorBgColor + ' ' + errorTextColor
+            className={`mb-6 rounded-xl border border-transparent p-4 text-sm font-medium sm:text-base ${
+              formStatus.success
+                ? `${successBgColor} ${successTextColor} border-emerald-200/80 dark:border-emerald-800`
+                : `${errorBgColor} ${errorTextColor} border-red-200/80 dark:border-red-900`
             }`}
           >
             {formStatus.message}

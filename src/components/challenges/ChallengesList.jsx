@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { challengesAPI } from '../../api/apiService';
 import CategoryFilter from './CategoryFilter';
-import ChallengeCard from './ChallengeCard';
 import Pagination from '../common/Pagination';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorMessage from '../common/ErrorMessage';
@@ -90,93 +89,116 @@ const ChallengesList = () => {
 
   return (
     <div className="w-full">
+      {(() => {
+        if (selectedChallenge) {
+          return <ChallengeDetail challengeId={selectedChallenge} />;
+        }
+        return (
+          <>
+            <CategoryFilter selectedCategory={selectedCategory} onCategoryChange={handleCategoryChange} />
 
-      {
-        (() => {
-          if(selectedChallenge) {
-            return (
-              <ChallengeDetail challengeId={selectedChallenge} />
-            )
-          } else {
-            return <>
-              <CategoryFilter
-                selectedCategory={selectedCategory}
-                onCategoryChange={handleCategoryChange}
-              />
-              
-              {isLoading ? (
-                <LoadingSpinner />
-              ) : (
-                <>
-                  <div className="overflow-x-auto mb-8">
-                    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border">
-                      <thead className="bg-gray-50 dark:bg-gray-800">
-                        <tr>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Challenge
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Created Date
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Category
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Points
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Deadline
-                          </th>
+            {isLoading ? (
+              <div className="flex min-h-[12rem] items-center justify-center">
+                <LoadingSpinner size="lg" />
+              </div>
+            ) : (
+              <>
+                <div className="mb-8 overflow-x-auto rounded-2xl border border-zinc-200/90 dark:border-zinc-800">
+                  <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
+                    <thead className="bg-zinc-50 dark:bg-zinc-900/80">
+                      <tr>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400"
+                        >
+                          Challenge
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400"
+                        >
+                          Created
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400"
+                        >
+                          Category
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400"
+                        >
+                          Points
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400"
+                        >
+                          Deadline
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-200 bg-white dark:divide-zinc-800 dark:bg-zinc-950/40">
+                      {challenges.map((challenge) => (
+                        <tr
+                          key={challenge.id}
+                          className="cursor-pointer transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-900/60"
+                          onClick={() => handleChallengeClick(challenge.id)}
+                        >
+                          <td className="px-6 py-4">
+                            <div className="flex items-center">
+                              {challenge.featured_media && (
+                                <div className="mr-4 h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-zinc-200 dark:border-zinc-700">
+                                  <img src={challenge.featured_media.thumbnail} alt="" className="h-full w-full object-cover" />
+                                </div>
+                              )}
+                              <div
+                                className="font-medium text-zinc-900 dark:text-zinc-100"
+                                dangerouslySetInnerHTML={{ __html: challenge.title.rendered }}
+                              />
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-zinc-600 dark:text-zinc-300">
+                            {format(new Date(challenge.date), 'dd/MM/yyyy HH:mm')}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-zinc-600 dark:text-zinc-300">
+                            {challenge.challenge_category && challenge.challenge_category.map((c) => c.name).join(', ')}
+                          </td>
+                          <td className="px-6 py-4 text-sm font-semibold text-violet-600 dark:text-violet-400">
+                            {challenge.max_score} pts
+                          </td>
+                          <td className="px-6 py-4 text-sm">
+                            {challenge.submission_deadline_enabled ? (
+                              new Date(challenge.submission_deadline) < new Date() ? (
+                                <span className="font-medium text-rose-600 dark:text-rose-400">Expired</span>
+                              ) : (
+                                <span className="font-medium text-emerald-600 dark:text-emerald-400">
+                                  {new Date(challenge.submission_deadline).toLocaleDateString()}
+                                </span>
+                              )
+                            ) : (
+                              <span className="text-zinc-500 dark:text-zinc-400">No deadline</span>
+                            )}
+                          </td>
                         </tr>
-                      </thead>
-                      <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
-                        {challenges.map(challenge => (
-                          <tr key={challenge.id} className="hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer" onClick={() => handleChallengeClick(challenge.id)}>
-                            <td className="px-6 py-4">
-                              <div className="flex items-center">
-                                {challenge.featured_media && (
-                                  <div className="h-12 w-12 rounded-full overflow-hidden mr-4 flex-shrink-0 border border-gray-200">
-                                    <img src={challenge.featured_media.thumbnail} alt="" className="h-full w-full object-cover" />
-                                  </div>
-                                )}
-                                <div className="font-medium text-gray-800 dark:text-gray-200" dangerouslySetInnerHTML={{ __html: challenge.title.rendered }} />
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                              {format(new Date(challenge.date), 'dd/MM/yyyy HH:mm')}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                              {challenge.challenge_category && challenge.challenge_category.map(category => category.name).join(', ')}
-                            </td>
-                            <td className="px-6 py-4 text-sm font-medium text-blue-600 dark:text-blue-400">
-                              {challenge.max_score} Points
-                            </td>
-                            <td className="px-6 py-4 text-sm">
-                              {challenge.submission_deadline_enabled ? 
-                                (new Date(challenge.submission_deadline) < new Date() ? 
-                                  <span className="text-red-600 dark:text-red-400 font-medium">Expired</span> : 
-                                  <span className="text-green-600 dark:text-green-400 font-medium">{new Date(challenge.submission_deadline).toLocaleDateString()}</span>) : 
-                                <span className="text-gray-500 dark:text-gray-400">No deadline</span>}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
                   
-                  {pagination.totalPages > 1 && (
-                    <Pagination
-                      currentPage={pagination.currentPage}
-                      totalPages={pagination.totalPages}
-                      onPageChange={handlePageChange}
-                    />
-                  )}
-                </>
-              )}
-            </>
-          }
-        })()
-      }
+                {pagination.totalPages > 1 && (
+                  <Pagination
+                    currentPage={pagination.currentPage}
+                    totalPages={pagination.totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                )}
+              </>
+            )}
+          </>
+        );
+      })()}
     </div>
   );
 };

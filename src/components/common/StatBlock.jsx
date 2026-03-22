@@ -79,19 +79,19 @@ const StatBlock = ({
   }, [number, duration]);
 
   return (
-    <div className={`bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow border border-gray-100 ${className}`}>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
-        {Icon && <Icon className="w-6 h-6 text-blue-500" />}
+    <div
+      className={`rounded-2xl border border-zinc-200/90 bg-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/60 ${className}`}
+    >
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">{title}</h3>
+        {Icon && <Icon className="h-6 w-6 text-violet-600 dark:text-violet-400" />}
       </div>
-      
+
       <div className="space-y-2">
-        <p className="text-3xl font-bold text-gray-900">
+        <p className="text-3xl font-bold tracking-tight text-zinc-950 dark:text-white">
           {count.toLocaleString()}
         </p>
-        {description && (
-          <p className="text-sm text-gray-600">{description}</p>
-        )}
+        {description && <p className="text-sm text-zinc-600 dark:text-zinc-400">{description}</p>}
       </div>
     </div>
   );

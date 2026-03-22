@@ -8,9 +8,12 @@ export default function ErrorMessage({
   onRetry,
 }) {
   const variants = {
-    error: 'bg-red-50 text-red-700 border-red-200',
-    warning: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    info: 'bg-blue-50 text-blue-700 border-blue-200',
+    error:
+      'border-red-200/80 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200',
+    warning:
+      'border-amber-200/80 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-200',
+    info:
+      'border-violet-200/80 bg-violet-50 text-violet-900 dark:border-violet-900 dark:bg-violet-950/40 dark:text-violet-200',
   };
 
   const icons = {
@@ -21,7 +24,7 @@ export default function ErrorMessage({
 
   return (
     <div
-      className={`rounded-lg border p-4 ${variants[variant]} ${className}`}
+      className={`rounded-xl border p-4 ${variants[variant]} ${className}`}
       role="alert"
     >
       <div className="flex items-start">

@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { submissionsAPI } from '../../api/apiService';
 import ErrorMessage from '../common/ErrorMessage';
+
+const labelClass = 'mb-2 block text-sm font-semibold text-zinc-800 dark:text-zinc-200';
+
+const inputClass =
+  'w-full rounded-xl border-2 border-zinc-200 bg-white px-4 py-2.5 text-zinc-900 placeholder:text-zinc-400 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100';
 
 const SubmissionForm = ({ challengeId, submissionId, onSuccess }) => {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     demo_url: '',
-    demo_video: ''
+    demo_video: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -15,15 +20,13 @@ const SubmissionForm = ({ challengeId, submissionId, onSuccess }) => {
 
   const fetchSubmission = async () => {
     const submission = await submissionsAPI.getSubmission(submissionId);
-    // console.log(submission);
-
     setFormData({
       title: submission.__title.raw,
       content: submission.__content.raw,
       demo_url: submission.demo_url,
-      demo_video: submission.demo_video
+      demo_video: submission.demo_video,
     });
-  }
+  };
 
   useEffect(() => {
     if (submissionId) {
@@ -33,9 +36,9 @@ const SubmissionForm = ({ challengeId, submissionId, onSuccess }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -70,7 +73,7 @@ const SubmissionForm = ({ challengeId, submissionId, onSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -86,8 +89,8 @@ const SubmissionForm = ({ challengeId, submissionId, onSuccess }) => {
         meta: {
           _submission_challenge_id: challengeId,
           _submission_demo_url: formData.demo_url,
-          _submission_demo_video: formData.demo_video
-        }
+          _submission_demo_video: formData.demo_video,
+        },
       };
 
       let response;
@@ -112,20 +115,29 @@ const SubmissionForm = ({ challengeId, submissionId, onSuccess }) => {
 
   if (success) {
     return (
-      <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-6 text-center shadow-sm border border-green-100 dark:border-green-800">
+      <div className="rounded-2xl border border-emerald-200/80 bg-emerald-50 p-6 text-center shadow-sm dark:border-emerald-900 dark:bg-emerald-950/30">
         <div className="flex flex-col items-center justify-center space-y-4">
-          <div className="bg-green-100 dark:bg-green-800 rounded-full p-3">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-600 dark:text-green-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="rounded-full bg-emerald-100 p-3 dark:bg-emerald-900/40">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-8 w-8 text-emerald-600 dark:text-emerald-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Submission Successful!</h3>
-          <p className="text-gray-600 dark:text-gray-300 mb-2">Your solution has been submitted successfully, please wait for the review.</p>
-          <button 
+          <h3 className="text-xl font-bold text-zinc-950 dark:text-zinc-50">Submission successful</h3>
+          <p className="mb-2 text-zinc-600 dark:text-zinc-400">
+            Your solution was submitted. Please wait for review.
+          </p>
+          <button
+            type="button"
             onClick={() => setSuccess(false)}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="rounded-xl bg-zinc-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-zinc-800 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-100"
           >
-            Submit Another Solution
+            Submit another solution
           </button>
         </div>
       </div>
@@ -133,10 +145,13 @@ const SubmissionForm = ({ challengeId, submissionId, onSuccess }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 border">
+    <form
+      onSubmit={handleSubmit}
+      className="rounded-2xl border border-zinc-200/90 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/60"
+    >
       <div className="mb-6">
-        <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
-          Solution Title
+        <label htmlFor="title" className={labelClass}>
+          Solution title
         </label>
         <input
           type="text"
@@ -145,14 +160,14 @@ const SubmissionForm = ({ challengeId, submissionId, onSuccess }) => {
           value={formData.title}
           onChange={handleChange}
           required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Enter a title for your solution"
+          className={inputClass}
+          placeholder="Title for your solution"
         />
       </div>
 
       <div className="mb-6">
-        <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
-          Solution Description
+        <label htmlFor="content" className={labelClass}>
+          Description
         </label>
         <textarea
           id="content"
@@ -160,15 +175,15 @@ const SubmissionForm = ({ challengeId, submissionId, onSuccess }) => {
           value={formData.content}
           onChange={handleChange}
           required
-          rows="6"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Describe your solution in detail"
+          rows={6}
+          className={inputClass}
+          placeholder="Describe your solution"
         />
       </div>
 
       <div className="mb-6">
-        <label htmlFor="demo_url" className="block text-sm font-medium text-gray-700 mb-2">
-          Demo URL (Optional)
+        <label htmlFor="demo_url" className={labelClass}>
+          Demo URL (optional)
         </label>
         <input
           type="url"
@@ -176,14 +191,14 @@ const SubmissionForm = ({ challengeId, submissionId, onSuccess }) => {
           name="demo_url"
           value={formData.demo_url}
           onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="https://your-demo-url.com"
+          className={inputClass}
+          placeholder="https://…"
         />
       </div>
 
       <div className="mb-6">
-        <label htmlFor="demo_video" className="block text-sm font-medium text-gray-700 mb-2">
-          Video URL (Optional)
+        <label htmlFor="demo_video" className={labelClass}>
+          Video URL (optional)
         </label>
         <input
           type="url"
@@ -191,37 +206,26 @@ const SubmissionForm = ({ challengeId, submissionId, onSuccess }) => {
           name="demo_video"
           value={formData.demo_video}
           onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="https://your-video-url.com"
+          className={inputClass}
+          placeholder="https://…"
         />
       </div>
 
       {error && (
-        <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
-          {error}
-        </div>
-      )}
-
-      {success && (
-        <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 text-green-700">
-          Your solution has been submitted successfully!
+        <div className="mb-6">
+          <ErrorMessage message={error} />
         </div>
       )}
 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-100"
       >
-        {isSubmitting 
-          ? 'Submitting...' 
-          : submissionId 
-            ? 'Update Solution' 
-            : 'Submit Solution'
-        }
+        {isSubmitting ? 'Submitting…' : submissionId ? 'Update solution' : 'Submit solution'}
       </button>
     </form>
   );
 };
 
-export default SubmissionForm; 
+export default SubmissionForm;

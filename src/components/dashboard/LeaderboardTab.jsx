@@ -28,7 +28,7 @@ export default function LeaderboardTab() {
     const [leaderboard, setLeaderboard] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
-    const [perPage, setPerPage] = useState(20);
+    const [perPage] = useState(20);
     const [totalPages, setTotalPages] = useState(1);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
@@ -55,77 +55,81 @@ export default function LeaderboardTab() {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-64">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            <div className="flex h-64 items-center justify-center">
+                <div className="h-12 w-12 animate-spin rounded-full border-2 border-zinc-200 border-t-violet-600 dark:border-zinc-700 dark:border-t-violet-400" />
             </div>
         );
     }
 
     if (!leaderboard || leaderboard.length === 0) {
         return (
-            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-8 text-center">
-                <p className="text-gray-500 dark:text-gray-400">No leaderboard data available.</p>
+            <div className="rounded-2xl border border-zinc-200/90 bg-zinc-50/80 p-8 text-center dark:border-zinc-800 dark:bg-zinc-900/40">
+                <p className="text-zinc-500 dark:text-zinc-400">No leaderboard data available.</p>
             </div>
         );
     }
 
     return (
         <>
-          <div className="p-6">
-              <h1 className="text-2xl font-bold mb-6 dark:text-white">Leaderboard</h1>
-              
-              <div className="overflow-x-auto border">
-                  <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                      <thead className="bg-gray-50 dark:bg-gray-800">
+          <div>
+              <h1 className="mb-6 text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">Leaderboard</h1>
+
+              <div className="overflow-x-auto rounded-2xl border border-zinc-200/90 dark:border-zinc-800">
+                  <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
+                      <thead className="bg-zinc-50 dark:bg-zinc-900/80">
                           <tr>
-                              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                              <th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                                   Rank
                               </th>
-                              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                              <th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                                   User
                               </th>
-                              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                              <th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                                   Points
                               </th>
                               {/** history activity */}
-                              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                              <th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                                   History
                               </th>
                           </tr>
                       </thead>
-                      <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+                      <tbody className="divide-y divide-zinc-200 bg-white dark:divide-zinc-800 dark:bg-zinc-950/40">
                           {leaderboard.map((entry) => (
-                              <tr key={entry.user_id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                              <tr key={entry.user_id} className="transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-900/60">
                                   <td className="px-6 py-4 whitespace-nowrap">
                                       <UserRank rank={entry.rank} />
                                   </td>
-                                  <td className="px-6 py-4 whitespace-nowrap">
+                                  <td className="whitespace-nowrap px-6 py-4">
                                       <div className="flex items-center">
                                           <div className="h-10 w-10 flex-shrink-0">
                                               <img
-                                                  className="h-10 w-10 rounded-full"
+                                                  className="h-10 w-10 rounded-full ring-2 ring-zinc-100 dark:ring-zinc-800"
                                                   src={entry.user_info.avatar || 'default-avatar.png'}
                                                   alt=""
                                               />
                                           </div>
                                           <div className="ml-4">
-                                              <div className="text-sm font-medium text-gray-900 dark:text-white">{entry.user_info.name}</div>
-                                              <div className="text-sm text-gray-500 dark:text-gray-400">{entry.user_info.email}</div>
+                                              <div className="text-sm font-medium text-zinc-900 dark:text-white">{entry.user_info.name}</div>
+                                              <div className="text-sm text-zinc-500 dark:text-zinc-400">{entry.user_info.email}</div>
                                           </div>
                                       </div>
                                   </td>
-                                  <td className="px-6 py-4 whitespace-nowrap">
-                                      <div className="text-sm font-semibold text-gray-900 dark:text-white">{entry.total} pts</div>
+                                  <td className="whitespace-nowrap px-6 py-4">
+                                      <div className="text-sm font-semibold text-zinc-900 dark:text-white">{entry.total} pts</div>
                                   </td>
                                   {/** history activity */}
-                                  <td className="px-6 py-4 whitespace-nowrap">
-                                      <div className="text-sm font-semibold text-gray-900 dark:text-white">
-                                          <button 
-                                            className="text-blue-500 hover:text-blue-700" 
+                                  <td className="whitespace-nowrap px-6 py-4">
+                                      <div className="text-sm font-semibold text-zinc-900 dark:text-white">
+                                          <button
+                                            type="button"
+                                            className="font-semibold text-violet-600 hover:text-violet-500 dark:text-violet-400"
                                             onClick={() => {
                                                 setSelectedUser(entry.user_id);
                                                 setIsModalOpen(true);
-                                            }}>View</button>
+                                            }}
+                                          >
+                                            View
+                                          </button>
                                       </div>
                                   </td>
                               </tr>

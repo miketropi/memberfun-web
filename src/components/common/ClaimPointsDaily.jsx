@@ -4,29 +4,19 @@ import { Diamond } from 'lucide-react';
 import useUserStore from '../../store/userStore';
 import { pointsAPI } from '../../api/apiService';
 
-const RandomNumberRoller = ({ min = 1, max = 100, speed = 100, className = "" }) => {
+const RandomNumberRoller = ({ min = 1, max = 100, speed = 100, className = '' }) => {
   const [number, setNumber] = React.useState(Math.floor(Math.random() * (max - min + 1)) + min);
-  const [isRolling, setIsRolling] = React.useState(true);
-  const [finalNumber, setFinalNumber] = React.useState(null);
   const intervalRef = React.useRef(null);
 
   React.useEffect(() => {
-    if (isRolling) {
-      intervalRef.current = setInterval(() => {
-        setNumber(Math.floor(Math.random() * (max - min + 1)) + min);
-      }, speed);
-    } else if (finalNumber !== null) {
-      clearInterval(intervalRef.current);
-      setNumber(finalNumber);
-    }
-
-    return () => {
-      clearInterval(intervalRef.current);
-    };
-  }, [isRolling, finalNumber, min, max, speed]);
+    intervalRef.current = setInterval(() => {
+      setNumber(Math.floor(Math.random() * (max - min + 1)) + min);
+    }, speed);
+    return () => clearInterval(intervalRef.current);
+  }, [min, max, speed]);
 
   return (
-    <div className={`${isRolling ? 'animate-pulse' : ''} ${className}`}>
+    <div className={`animate-pulse ${className}`}>
       {number}
     </div>
   );
@@ -66,7 +56,7 @@ const ClaimPointsDaily = ( { lastClaimDate = null, serverCurrentDate = null, upd
       console.log('can claim');
       setCanClaim(true);
     }
-  }, [lastClaimDate]);
+  }, [lastClaimDate, serverCurrentDate]);
 
   const handleClaim = async () => {
     try {
@@ -96,7 +86,7 @@ const ClaimPointsDaily = ( { lastClaimDate = null, serverCurrentDate = null, upd
       } else {
         throw new Error('Failed to claim points');
       }
-    } catch (error) {
+    } catch {
       toastRef.current.show('Failed to claim points. Please try again.', {
         type: 'error',
         duration: 3000,
@@ -141,38 +131,41 @@ const ClaimPointsDaily = ( { lastClaimDate = null, serverCurrentDate = null, upd
         }, 3000);
       } } /> */}
       {/* { lastClaimDate } - { serverCurrentDate } */}
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
-        <div className="p-4 md:p-6 bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col justify-center">
-          <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-2">
-            Daily Points Reward
-          </h2>
-          <p className="text-sm md:text-base text-gray-600">
-            🎁 Login every day to claim your random points bonus! ✨
-            🏆 Become a host for a <strong>Seminar</strong> or join <strong>Challenges</strong> to get more points! 🚀
-          </p>
-          <div className="mt-3 md:mt-4 flex items-center">
-            <div className="h-2 w-2 rounded-full bg-green-500 mr-2"></div>
-            <span className="text-xs md:text-sm text-green-600 font-medium">
-              {canClaim ? 'Available to claim now' : `Next claim in: ${getNextClaimTime()}`}
-            </span>
+      <div className="grid w-full grid-cols-1 gap-4 overflow-hidden rounded-2xl border border-zinc-200/90 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900/60 md:grid-cols-2 md:gap-6">
+        <div className="relative flex flex-col justify-center bg-gradient-to-br from-zinc-900 via-violet-950 to-zinc-950 p-4 text-white md:p-6">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-violet-500/20 via-transparent to-transparent" />
+          <div className="relative">
+            <h2 className="mb-2 text-lg font-bold md:text-xl">Daily points reward</h2>
+            <p className="text-sm text-zinc-300 md:text-base">
+              🎁 Login every day to claim your random points bonus! ✨ 🏆 Become a host for a{' '}
+              <strong className="text-white">Seminar</strong> or join <strong className="text-white">Challenges</strong>{' '}
+              to get more points! 🚀
+            </p>
+            <div className="mt-3 flex items-center md:mt-4">
+              <div className="mr-2 h-2 w-2 rounded-full bg-emerald-400" />
+              <span className="text-xs font-medium text-emerald-200 md:text-sm">
+                {canClaim ? 'Available to claim now' : `Next claim in: ${getNextClaimTime()}`}
+              </span>
+            </div>
           </div>
         </div>
-        
-        <div className="p-4 md:p-6 flex flex-col justify-center items-center bg-white">
+
+        <div className="flex flex-col items-center justify-center bg-white p-4 dark:bg-zinc-900/40 md:p-6">
           {canClaim ? (
             <>
-              <div className="text-center mb-3 md:mb-4">
-                <div className="inline-block p-2 md:p-3 rounded-full bg-blue-100 mb-2">
-                  <Diamond className="h-6 w-6 md:h-8 md:w-8 text-blue-600" />
+              <div className="mb-3 text-center md:mb-4">
+                <div className="mb-2 inline-block rounded-full bg-violet-100 p-2 dark:bg-violet-950/60 md:p-3">
+                  <Diamond className="h-6 w-6 text-violet-600 dark:text-violet-400 md:h-8 md:w-8" />
                 </div>
-                <p className="text-sm md:text-base text-gray-700 font-medium">Ready to claim your daily points?</p>
+                <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 md:text-base">
+                  Ready to claim your daily points?
+                </p>
               </div>
               <button
-                className={`w-full py-2 md:py-3 px-4 md:px-6 text-white bg-blue-600 rounded-lg 
-                  transition-all duration-200 ease-in-out text-sm md:text-base
-                  ${isLoading ? 'opacity-75 cursor-not-allowed' : 'hover:bg-blue-700 hover:shadow-md'}
-                  disabled:bg-gray-400 disabled:cursor-not-allowed
-                  relative`}
+                type="button"
+                className={`relative w-full rounded-xl bg-zinc-950 py-2 px-4 text-sm font-semibold text-white transition-all duration-200 ease-in-out md:py-3 md:px-6 md:text-base dark:bg-white dark:text-zinc-950 ${
+                  isLoading ? 'cursor-not-allowed opacity-75' : 'hover:bg-zinc-800 hover:shadow-md dark:hover:bg-zinc-100'
+                } disabled:cursor-not-allowed disabled:bg-zinc-400 dark:disabled:bg-zinc-600`}
                 onClick={handleClaim}
                 disabled={isLoading}
               >
@@ -191,22 +184,24 @@ const ClaimPointsDaily = ( { lastClaimDate = null, serverCurrentDate = null, upd
             </>
           ) : (
             <div className="text-center">
-              <div className="inline-block p-2 md:p-3 rounded-full bg-gray-100 mb-3 md:mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-8 md:w-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="mb-3 inline-block rounded-full bg-zinc-100 p-2 dark:bg-zinc-800 md:mb-4 md:p-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-zinc-500 dark:text-zinc-400 md:h-8 md:w-8"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-base md:text-lg font-medium text-gray-800 mb-2">
-                Points Already Claimed
-              </h3>
-              <p className="text-sm md:text-base text-gray-600 mb-2">
-                {
-                  number > 0 
-                    ? `You've claimed +${number} points today!` 
-                    : "You've already claimed your daily points!"
-                }
+              <h3 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-100 md:text-lg">Points already claimed</h3>
+              <p className="mb-2 text-sm text-zinc-600 dark:text-zinc-400 md:text-base">
+                {number > 0
+                  ? `You've claimed +${number} points today!`
+                  : "You've already claimed your daily points!"}
               </p>
-              <p className="text-sm md:text-base text-blue-600 font-medium">
+              <p className="text-sm font-semibold text-violet-600 dark:text-violet-400 md:text-base">
                 Come back in {getNextClaimTime()}
               </p>
             </div>

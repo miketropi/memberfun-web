@@ -1,41 +1,50 @@
-import React from 'react';
-
 const MissionVision = ({
-  bgColor = "bg-gradient-to-br from-slate-50 to-indigo-50",
-  missionTitle = "Our Mission 🎯",
+  missionTitle = 'Our mission',
   missionContent = [
-    "🚀 Our mission is to empower businesses with cutting-edge web development solutions that drive digital transformation and create exceptional online experiences.",
-    "💡 We believe in crafting innovative, scalable, and user-centric web applications that help our clients stay ahead in the rapidly evolving digital landscape."
+    'Help member organizations spend less time herding links and more time building community — through one calm, structured hub.',
+    'We prioritize readable interfaces, clear roles, and workflows that match how real teams run programs and seminars.',
   ],
-  visionTitle = "Our Vision 🔭",
+  visionTitle = 'Our vision',
   visionContent = [
-    "🌏 We envision a world where every business, regardless of size or industry, has access to high-quality web development services that drive their digital success.",
-    "⭐ Our goal is to become the leading web development agency, known for our technical excellence, innovative solutions, and dedication to exceeding client expectations."
-  ]
+    'Every member-led group — from clubs to professional circles — deserves tooling that feels intentional, not improvised.',
+    'We aim to be the default place Beplus-style communities trust for knowledge sharing, events, and staying in sync.',
+  ],
 }) => {
   return (
-    <div className={`${bgColor} py-24 relative overflow-hidden`}>
-      <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,transparent,black)] pointer-events-none" />
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="lg:grid lg:grid-cols-2 lg:gap-16">
-          <div className="backdrop-blur-sm bg-white/30 p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300">
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              {missionTitle}
+    <div className="relative overflow-hidden border-b border-zinc-200/90 bg-zinc-100/80 py-20 dark:border-zinc-800 dark:bg-zinc-900/40 sm:py-24">
+      <div
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#71717a0d_1px,transparent_1px),linear-gradient(to_bottom,#71717a0d_1px,transparent_1px)] bg-[size:3rem_3rem] dark:bg-[linear-gradient(to_right,#fafafa06_1px,transparent_1px),linear-gradient(to_bottom,#fafafa06_1px,transparent_1px)]"
+        aria-hidden
+      />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
+          <div className="rounded-2xl border border-zinc-200/90 bg-white/90 p-8 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/80 lg:p-10">
+            <h2 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50 sm:text-3xl">
+              <span className="bg-gradient-to-r from-violet-600 to-cyan-600 bg-clip-text text-transparent dark:from-violet-400 dark:to-cyan-400">
+                {missionTitle}
+              </span>
             </h2>
             {missionContent.map((paragraph, index) => (
-              <p key={index} className="mt-6 text-md text-gray-600 leading-relaxed">
+              <p
+                key={index}
+                className="mt-5 text-base leading-relaxed text-zinc-700 dark:text-zinc-300"
+              >
                 {paragraph}
               </p>
             ))}
           </div>
 
-          <div className="mt-10 lg:mt-0 backdrop-blur-sm bg-white/30 p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300">
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              {visionTitle}
+          <div className="rounded-2xl border border-zinc-200/90 bg-white/90 p-8 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/80 lg:p-10">
+            <h2 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50 sm:text-3xl">
+              <span className="bg-gradient-to-r from-violet-600 to-cyan-600 bg-clip-text text-transparent dark:from-violet-400 dark:to-cyan-400">
+                {visionTitle}
+              </span>
             </h2>
             {visionContent.map((paragraph, index) => (
-              <p key={index} className="mt-6 text-md text-gray-600 leading-relaxed">
+              <p
+                key={index}
+                className="mt-5 text-base leading-relaxed text-zinc-700 dark:text-zinc-300"
+              >
                 {paragraph}
               </p>
             ))}

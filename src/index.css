@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,7 +7,7 @@
 /* Custom styles can be added below */
 
 :root {
-  font-family: 'Space Mono', monospace, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Hanken Grotesk', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -21,6 +21,10 @@
 :root {
   color: #213547;
   background-color: #ffffff;
+}
+
+code, kbd, pre, samp {
+  font-family: 'Google Sans Code', monospace;
 }
 
 /* Dark mode styles */

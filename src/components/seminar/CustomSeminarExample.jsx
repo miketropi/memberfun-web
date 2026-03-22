@@ -118,7 +118,7 @@ export default function CustomSeminarExample() {
     setShowRegistrationForm(false);
   };
 
-  const handleRegister = (seminarId) => {
+  const handleRegister = () => {
     setShowRegistrationForm(true);
   };
 
@@ -182,20 +182,19 @@ export default function CustomSeminarExample() {
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
-        <strong className="font-bold">Error!</strong>
-        <span className="block sm:inline"> {error}</span>
+      <div
+        className="relative rounded-xl border border-red-200/80 bg-red-50 px-4 py-3 text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200"
+        role="alert"
+      >
+        <strong className="font-semibold">Error</strong>
+        <span className="mt-1 block sm:mt-0 sm:inline sm:before:content-['—_']">{error}</span>
       </div>
     );
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800">
-      <SeminarHeader 
-        totalSeminars={pagination.total}
-        currentSeminars={seminars.length}
-        status={filters.status}
-      />
+    <div className="rounded-2xl bg-transparent">
+      <SeminarHeader />
 
       <SeminarFilters 
         filters={filters}
@@ -206,8 +205,8 @@ export default function CustomSeminarExample() {
         (() => {
           if(loading) {
             return (
-              <div className="flex justify-center items-center h-64">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+              <div className="flex h-64 items-center justify-center">
+                <div className="h-12 w-12 animate-spin rounded-full border-2 border-zinc-200 border-t-violet-600 dark:border-zinc-700 dark:border-t-violet-400" />
               </div>
             );
           } else {
